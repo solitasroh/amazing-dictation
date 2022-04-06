@@ -1,6 +1,8 @@
-import { Button } from "antd";
 import React from "react";
+import { Button } from "antd";
 import styled from 'styled-components';
+
+import buttonImage from '../Assets/kakao_login_medium_narrow.png';
 
 const Container = styled.div`
     display: flex;
@@ -9,7 +11,7 @@ const Container = styled.div`
 function Login() {
     return (
         <Container>
-            <button><img src="./Assets/kakao_login_medium_narrow.png"></img></button>
+            <button><img alt="test" src={buttonImage}></img></button>
         </Container>
     );
 }

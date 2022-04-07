@@ -15,6 +15,7 @@ const ButtonContainer = styled.button<Props>`
   outline: none;
   cursor: pointer;
 `;
+
 export default function LoginButton({
   onClick,
   image,

@@ -13,9 +13,10 @@ const Container = styled.div`
   justify-content: center;
   background: #ffffff;
 `;
+
 function Login() {
   const onClick = (): void => {
-    // console.log('button click!');
+    console.log('button click!');
   };
   return (
     <Container>

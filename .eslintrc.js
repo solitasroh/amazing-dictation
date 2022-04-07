@@ -50,6 +50,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 0,
     'react/require-default-props': 'off',
     'react/jsx-wrap-multilines': 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
   settings: {
     react: {

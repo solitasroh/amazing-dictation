@@ -1,17 +1,25 @@
 import React from "react";
-import { Button } from "antd";
 import styled from 'styled-components';
 
 import buttonImage from '../Assets/kakao_login_medium_narrow.png';
+import LoginButton from "../Components/Login/LoginButton";
 
 const Container = styled.div`
-    display: flex;
-    justify-content: flex-start;
+    display : flex;
+    width : 100%;
+    height : 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
 `;
 function Login() {
+    const onClick = () : void => {
+        console.log("button click!");
+    };
     return (
         <Container>
-            <button><img alt="test" src={buttonImage}></img></button>
+            <LoginButton onClick={onClick} image = {buttonImage}></LoginButton>
         </Container>
     );
 }

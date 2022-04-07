@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 function Login() {
   const onClick = (): void => {
-    console.log('button click!');
+    // console.log('button click!');
   };
   return (
     <Container>

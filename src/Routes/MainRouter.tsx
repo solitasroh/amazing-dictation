@@ -1,6 +1,6 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "../Pages/Login";
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from '../Pages/Login';
 
 function MainRouter() {
   return (
@@ -13,4 +13,3 @@ function MainRouter() {
 }
 
 export default MainRouter;
-

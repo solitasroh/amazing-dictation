@@ -7,6 +7,7 @@ import SongIntroPage from '../Pages/Game/SongIntroPage';
 import ResultPage from '../Pages/Game/ResultPage';
 import PlayPage from '../Pages/Game/PlayPage';
 import HintPage from '../Pages/Game/HintPage';
+import InsertSong from '../Pages/Admin/InsertSong';
 
 function MainRouter() {
   return (
@@ -19,6 +20,7 @@ function MainRouter() {
         <Route path="/Game/Play" element={<PlayPage id={1} />} />
         <Route path="/Game/Result" element={<ResultPage id={1} />} />
         <Route path="/Game/Hint" element={<HintPage id={1} />} />
+        <Route path="/Admin/InsertSong" element={<InsertSong id={1} />} />
       </Routes>
     </BrowserRouter>
   );

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import buttonImage from '../Assets/kakao_login_medium_narrow.png';
+import googleImage from '../Assets/btn_google_signin_dark_normal_web.png';
 import LoginButton from '../Components/Login/LoginButton';
 
 const Container = styled.div`
@@ -21,6 +22,7 @@ function Login() {
   return (
     <Container>
       <LoginButton onClick={onClick} image={buttonImage} />
+      <LoginButton onClick ={onClick} image ={googleImage} />
     </Container>
   );
 }

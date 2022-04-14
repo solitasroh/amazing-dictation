@@ -1,6 +1,7 @@
 import { Button, Input } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import startImage from '../../Assets/startButton3.png';
 import startChangeImage from '../../Assets/startButton1.png';
 
@@ -42,11 +43,16 @@ const InputContainer = styled.div`
 `;
 function InitPage({ id }: Props): React.ReactElement {
   const [over, setOver] = useState(false);
+  const navigate = useNavigate();
+
+  const onClick = (): void => {
+    navigate(`/Game/Loading`);
+  };
   return (
     <>
       <Container>
         <TitleContainer>방구석 놀토</TitleContainer>
-        <StartButton onMouseOver={() => setOver(!over)}>
+        <StartButton onMouseOver={() => setOver(!over)} onClick={onClick}>
           <img alt="test" src={over ? startChangeImage : startImage} />
         </StartButton>
       </Container>

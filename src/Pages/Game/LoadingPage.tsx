@@ -1,6 +1,7 @@
 import { LoadingOutlined } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
@@ -35,6 +36,10 @@ const InputContainer = styled.div`
   display: flex;
 `;
 function LoadingPage({ id }: Props): React.ReactElement {
+  const navigate = useNavigate();
+
+  setTimeout(() => navigate(`/Game/SongIntro`), 2000);
+
   return (
     <>
       <Container>

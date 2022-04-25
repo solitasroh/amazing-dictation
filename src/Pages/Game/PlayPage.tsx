@@ -1,7 +1,9 @@
 import { Button, Input } from 'antd';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Countdown from 'react-countdown';
+import { useNavigate } from 'react-router-dom';
+import MusicPlay from '../../Components/MusicPlay';
 
 interface Props {
   id: number;
@@ -13,6 +15,9 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   background: #979797;
+`;
+const RowContainer = styled.div`
+  display: flex;
 `;
 const IyricsContainer = styled.div`
   display: flex;
@@ -39,10 +44,6 @@ const SecretWords = styled.div`
   justify-content: center;
   border: 1px solid #ffe600;
   color: #ffffff;
-`;
-const HeadContainer = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 const CounterAnimation = keyframes`
  from {   
@@ -77,14 +78,26 @@ const InputContainer = styled.div`
   display: flex;
 `;
 function PlayPage({ id }: Props): React.ReactElement {
+  const inputValue = useRef<string>('');
   const secretSong = [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
   ];
-  const [isShow, setShow] = useState(true);
+  const lyrics = '나는 훗훗훗';
+  const [lyricsShowing, setLyricsShowing] = useState(true);
+  const onChange = (value: string) => {
+    inputValue.current = value;
+    console.log(inputValue);
+  };
+
+  const navigate = useNavigate();
+  const checkAnswer = (): void => {
+    const answer = lyrics === inputValue.current;
+    navigate(`/Game/Result`, { state: answer });
+  };
   return (
     <>
       <Container>
-        {isShow ? (
+        {lyricsShowing ? (
           <>
             <CounterContainer>
               {' '}
@@ -107,11 +120,17 @@ function PlayPage({ id }: Props): React.ReactElement {
               </ShowIyrics>
             </IyricsContainer>
           </>
-        ) : null}
+        ) : (
+          <RowContainer>
+            <MusicPlay />
+          </RowContainer>
+        )}
       </Container>
       <InputContainer>
-        <Input />
-        <Button type="primary">submit</Button>
+        <Input onChange={e => onChange(e.target.value)} />
+        <Button type="primary" onClick={checkAnswer}>
+          submit
+        </Button>
       </InputContainer>
     </>
   );

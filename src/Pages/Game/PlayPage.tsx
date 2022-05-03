@@ -60,7 +60,7 @@ const CounterContainer = styled.div`
   font-size: medium;
   font-weight: 500;
   color: #970c0c;
-  animation: ${CounterAnimation} 10 0.5s;
+  animation: ${CounterAnimation} 10 1s;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -101,7 +101,8 @@ function PlayPage({ id }: Props): React.ReactElement {
           <>
             <CounterContainer>
               {' '}
-              제한시간: <Countdown date={Date.now() + 10000} />
+              제한시간:{' '}
+              <Countdown date={Date.now() + 10000} onComplete={checkAnswer} />
             </CounterContainer>
             <TitleContainer>노래 제목</TitleContainer>
             <IyricsContainer>

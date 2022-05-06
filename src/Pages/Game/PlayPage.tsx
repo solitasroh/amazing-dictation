@@ -92,7 +92,7 @@ function PlayPage({ id }: Props): React.ReactElement {
   const navigate = useNavigate();
   const checkAnswer = (): void => {
     const answer = lyrics === inputValue.current;
-    navigate(`/Game/Result`, { state: answer });
+    navigate(`/Game/Result`, { state: { answer, lyrics } });
   };
   return (
     <>

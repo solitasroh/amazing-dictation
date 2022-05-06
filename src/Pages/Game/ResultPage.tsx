@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
@@ -35,9 +35,10 @@ const ButtonContainer = styled.div`
 `;
 
 function ResultPage({ id }: Props): React.ReactElement {
-  const { state } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
-  const result = state ? '정답' : '실패';
+  const data = location?.state as { answer: boolean; lyrics: string };
+  const result = data?.answer ? '정답' : '실패';
   const [nextStage, setNextStage] = useState('');
 
   useEffect(() => {
@@ -49,7 +50,7 @@ function ResultPage({ id }: Props): React.ReactElement {
   }, []);
   const onClick = () => {
     if (result === '실패') {
-      navigate(`/Game/Hint`);
+      navigate(`/Game/Hint`, { state: data?.lyrics });
     } else {
       navigate(`/Game/Loading`);
     }

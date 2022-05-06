@@ -1,6 +1,7 @@
 import { ThunderboltOutlined, ThunderboltTwoTone } from '@ant-design/icons';
 import { Button, Input } from 'antd';
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface Props {
@@ -34,10 +35,18 @@ const HintBox = styled.div`
   font-size: 20px;
 `;
 function HintPage({ id }: Props): React.ReactElement {
+  const location = useLocation();
+  const word = location?.state as { lyrics: string };
+  console.log(word);
+  const navigate = useNavigate();
   return (
     <Container>
       <HintContainer>
-        <HintBox>전체 띄어쓰기</HintBox>
+        <HintBox
+          onClick={() => navigate(`/Game/Hint/Spacing`, { state: word })}
+        >
+          전체 띄어쓰기
+        </HintBox>
         <HintBox>한글자</HintBox>
         <HintBox>초성</HintBox>
       </HintContainer>

@@ -19,19 +19,19 @@ const Container = styled.div`
 const RowContainer = styled.div`
   display: flex;
 `;
-const IyricsContainer = styled.div`
+const LyricsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 550px;
 `;
-const ShowIyrics = styled.div`
+const ShowLyrics = styled.div`
   font-weight: 200;
   font-size: 20px;
   line-height: 50px;
   color: #ffffff;
 `;
-const SecretIyrics = styled.div`
+const SecretLyrics = styled.div`
   display: flex;
 `;
 const SecretWords = styled.div`
@@ -105,21 +105,21 @@ function PlayPage({ id }: Props): React.ReactElement {
               <Countdown date={Date.now() + 10000} onComplete={checkAnswer} />
             </CounterContainer>
             <TitleContainer>노래 제목</TitleContainer>
-            <IyricsContainer>
-              <ShowIyrics>
+            <LyricsContainer>
+              <ShowLyrics>
                 넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!
                 Shoot! Shoot! 나는 훗! 훗! 훗!
-              </ShowIyrics>
-              <SecretIyrics>
+              </ShowLyrics>
+              <SecretLyrics>
                 {secretSong.map(index => (
                   <SecretWords key={index}>{index}</SecretWords>
                 ))}
-              </SecretIyrics>
-              <ShowIyrics>
+              </SecretLyrics>
+              <ShowLyrics>
                 넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!
                 Shoot! Shoot! 나는 훗! 훗! 훗!
-              </ShowIyrics>
-            </IyricsContainer>
+              </ShowLyrics>
+            </LyricsContainer>
           </>
         ) : (
           <RowContainer>

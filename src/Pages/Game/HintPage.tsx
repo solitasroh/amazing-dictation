@@ -47,7 +47,9 @@ function HintPage({ id }: Props): React.ReactElement {
         >
           전체 띄어쓰기
         </HintBox>
-        <HintBox>한글자</HintBox>
+        <HintBox onClick={() => navigate(`/Game/Hint/Word`, { state: word })}>
+          한글자
+        </HintBox>
         <HintBox>초성</HintBox>
       </HintContainer>
       <HintContainer>

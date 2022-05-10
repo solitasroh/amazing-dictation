@@ -65,7 +65,6 @@ function SpacingHint({ id }: Props): React.ReactElement {
       countArray.push(0);
     }
   }
-  console.log(count);
   return (
     <Container>
       <LyricsContainer>

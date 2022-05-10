@@ -50,7 +50,9 @@ function HintPage({ id }: Props): React.ReactElement {
         <HintBox onClick={() => navigate(`/Game/Hint/Word`, { state: word })}>
           한글자
         </HintBox>
-        <HintBox>초성</HintBox>
+        <HintBox onClick={() => navigate(`/Game/Hint/Inital`, { state: word })}>
+          초성
+        </HintBox>
       </HintContainer>
       <HintContainer>
         <HintBox>70% 듣기</HintBox>

@@ -1,45 +1,71 @@
-import { Button, Input } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import startImage from '../../Assets/startButton3.png';
-import startChangeImage from '../../Assets/startButton1.png';
+import LogoImg from '../../Assets/Logo.png';
 
 interface Props {
   id: number;
 }
+interface colorProps {
+  color: string;
+}
+const LogoContainer = styled.div`
+  position: relative;
+  align-items: flex-start;
+`;
+const Logo = styled.img`
+  width: 140px;
+  margin: 20px;
+`;
 const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 400px;
+  height: 657px;
   flex-direction: column;
+`;
+const SongContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const TransparentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 200px;
   align-items: center;
   justify-content: space-around;
-  background: #979797;
+  background: rgba(238, 238, 238, 0.86);
 `;
-const TitleContainer = styled.div`
+const TitleContainer = styled.div<colorProps>`
   display: flex;
-  width: 500px;
-  height: 100px;
-  left: 223px;
-  top: 186px;
-  align-items: center;
-  justify-content: center;
-  background: #f07a7a;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 40px;
   line-height: 77px;
-  color: #ffffff;
+  font-family: 'RixYeoljeongdo_Pro';
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: ${prop => prop.color};
+  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 1px;
+  text-shadow: 2px 4px 2px black;
 `;
 const StartButton = styled.div`
   display: flex;
-  top: 100px;
+  width: 250px;
+  justify-content: center;
+  font-family: 'vitro_core';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 77px;
+  background: #92c6bc;
+  border: 1.5px solid #296868;
+  -webkit-text-fill-color: white;
+  -webkit-text-stroke-color: #296868;
+  -webkit-text-stroke-width: 1px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-`;
-const InputContainer = styled.div`
-  display: flex;
 `;
 function InitPage({ id }: Props): React.ReactElement {
   const [over, setOver] = useState(false);
@@ -49,18 +75,22 @@ function InitPage({ id }: Props): React.ReactElement {
     navigate(`/Game/Loading`);
   };
   return (
-    <>
-      <Container>
-        <TitleContainer>방구석 놀토</TitleContainer>
-        <StartButton onMouseOver={() => setOver(!over)} onClick={onClick}>
-          <img alt="test" src={over ? startChangeImage : startImage} />
-        </StartButton>
-      </Container>
-      <InputContainer>
-        <Input />
-        <Button type="primary">submit</Button>
-      </InputContainer>
-    </>
+    <Container>
+      <LogoContainer>
+        <Logo src={LogoImg} />
+      </LogoContainer>
+      <SongContainer>
+        <TransparentContainer>
+          <SongContainer>
+            <TitleContainer color="#ffa09d">시작</TitleContainer>
+            <TitleContainer color="#ffffff">할 준비가 되었나요?</TitleContainer>
+          </SongContainer>
+          <StartButton onMouseOver={() => setOver(!over)} onClick={onClick}>
+            주크박스 ON
+          </StartButton>
+        </TransparentContainer>
+      </SongContainer>
+    </Container>
   );
 }
 

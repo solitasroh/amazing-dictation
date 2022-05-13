@@ -45,6 +45,7 @@ function Login() {
         <Logo src={LogoImg} />
       </LogoContainer>
       <ButtonContainer>
+        <a href="http://localhost:3001/auth/kakao">카카오 로그인 테스트</a>
         <LoginButton onClick={onClick} image={buttonImage} />
         <LoginButton onClick={onClick} image={googleImage} />
       </ButtonContainer>

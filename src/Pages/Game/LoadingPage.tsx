@@ -3,6 +3,9 @@ import { Button, Input } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import {useQuery} from "@apollo/client";
+import {QUERY_GAMES} from "../../api-client";
+import IGame from "../../types/IGame";
 
 interface Props {
   id: number;
@@ -37,6 +40,10 @@ const InputContainer = styled.div`
 `;
 function LoadingPage({ id }: Props): React.ReactElement {
   const navigate = useNavigate();
+
+  const { loading, error, data } = useQuery<IGame[]>(QUERY_GAMES);
+
+  if (!loading) console.log(data);
 
   setTimeout(() => navigate(`/Game/SongIntro`), 2000);
 

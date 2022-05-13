@@ -56,7 +56,7 @@ function HintPage({ id }: Props): React.ReactElement {
       </HintContainer>
       <HintContainer>
         <HintBox>70% 듣기</HintBox>
-        <HintBox onClick={() => navigate(`/Game/Hint/One`, { state: word })}>
+        <HintBox onClick={() => navigate(`/Game/Hint/OneFifths`, {state: word})}>
           5분의 1초
           <ThunderboltTwoTone
             twoToneColor="#ffd900"

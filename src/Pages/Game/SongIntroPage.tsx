@@ -1,133 +1,86 @@
-import { Button, Input } from 'antd';
-import React, { useRef, useState } from 'react';
-import { CountdownCircleTimer } from 'react-countdown-circle-timer';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import LogoImg from '../../Assets/Logo.png';
+import CountDown from '../../Components/CountDown';
 
 interface Props {
   id: number;
 }
-interface TimeProps {
-  isTimeUp?: boolean;
-  isTimeDown?: boolean;
+
+interface colorProps {
+  color: string;
 }
+
 const boxAnimation = keyframes`
  from {   
-  opacity: 0;
-    transform: translateY(-100%);
+  transform: rotate(0deg);
   }
   to { 
-  transform: translateY(0);
-  opacity: 1;
+    transform: rotate(360deg);
   }
 `;
-const boxAnimation2 = keyframes`
- from {   
-  transform: translateY(0);
-  opacity: 1;
-  }
-  to { 
-    opacity: 0;
-    transform: translateY(100%);
-  }
+const LogoContainer = styled.div`
+  position: relative;
+  align-items: flex-start;
+`;
+const Logo = styled.img`
+  width: 140px;
+  margin: 20px;
 `;
 const Container = styled.div`
   display: flex;
   width: 100%;
-  height: 400px;
+  height: 657px;
   flex-direction: column;
+`;
+const TransparentContainer = styled.div`
+position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 200px;
   align-items: center;
   justify-content: space-around;
-  background: #979797;
+  background: rgba(238, 238, 238, 0.86);
 `;
-const TimerContainer = styled.div`
-  position: relative;
-  width: 80px;
-  height: 60px;
-  font-size: 48px;
-  font-family: 'Montserrat';
+const SongContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
-const TimerChange = styled.div<TimeProps>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+const TitleBox = styled.div<colorProps>`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  animation: ${boxAnimation} 3 1s;
-`;
-const TimerChange1 = styled.div<TimeProps>`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  animation: ${boxAnimation2} 3 1s;
-`;
-const TitleContainer = styled.div`
-  display: flex;
-  width: 500px;
-  height: 100px;
-  left: 223px;
-  top: 186px;
-  align-items: center;
-  justify-content: center;
-  background: #f07a7a;
-  font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 40px;
   line-height: 77px;
-  color: #ffffff;
+  transform: rotate(-5deg);
+  justify-content: center;
+  font-family: 'nice';
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: ${prop => prop.color};
+  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 1px;
+  text-shadow: 2px 4px 2px black;
 `;
-
-const InputContainer = styled.div`
+const TitleContainer = styled.div`
   display: flex;
+  align-items: center;
+  flex-direction: column;
 `;
-
-function RenderTime({
-  remainingTime,
-}: {
-  remainingTime: number;
-}): React.ReactElement {
-  const currentTime = useRef(remainingTime);
-  const prevTime = useRef(0);
-  const isNewTimeFirstTick = useRef(false);
-  const [, setOneLastRerender] = useState(0);
-
-  if (currentTime.current !== remainingTime) {
-    isNewTimeFirstTick.current = true;
-    prevTime.current = currentTime.current;
-    currentTime.current = remainingTime;
-  } else {
-    isNewTimeFirstTick.current = false;
-  }
-
-  // force one last re-render when the time is over to tirgger the last animation
-  if (remainingTime === 0) {
-    setTimeout(() => {
-      setOneLastRerender((val: number) => val + 1);
-    }, 20);
-  }
-
-  const isTimeUp = isNewTimeFirstTick.current;
-  return (
-    <TimerContainer>
-      <TimerChange>{remainingTime}</TimerChange>
-      {prevTime.current !== 0 && (
-        <TimerChange1>{prevTime.current}</TimerChange1>
-      )}
-    </TimerContainer>
-  );
-}
+const CircleContainer = styled.div`
+  display: flex;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  border-radius: 50%;
+  border-top: 3px solid;
+  border-top-color: 
+    #ff5f43;
+  animation: ${boxAnimation} 3 1s;
+`;
 
 function SongIntroPage({ id }: Props): React.ReactElement {
   const navigate = useNavigate();
@@ -136,24 +89,32 @@ function SongIntroPage({ id }: Props): React.ReactElement {
     navigate(`/Game/Play`);
   };
   return (
-    <>
-      <Container>
-        <TitleContainer>노래 제목</TitleContainer>
-        <CountdownCircleTimer
-          isPlaying
-          duration={3}
-          colors={['#004777', '#F7B801', '#A30000']}
-          colorsTime={[3, 2, 0]}
-          onComplete={onComplete}
-        >
-          {RenderTime}
-        </CountdownCircleTimer>
-      </Container>
-      <InputContainer>
-        <Input />
-        <Button type="primary">submit</Button>
-      </InputContainer>
-    </>
+    <Container>
+      <LogoContainer>
+        <Logo src={LogoImg} />
+      </LogoContainer>
+      <SongContainer>
+        <TransparentContainer>
+          <TitleContainer>
+            <TitleBox style={{ position: 'relative' }} color="#ffffff">
+              소녀시대
+              <TitleBox
+                style={{ position: 'absolute', top: 40 }}
+                color=" #decd33"
+              >
+                Hook
+              </TitleBox>
+            </TitleBox>
+          </TitleContainer>
+          <CircleContainer onAnimationEnd={onComplete}/>
+          <CountDown 
+          position= 'absolute'
+          bottom= {30}
+          time ={3}
+          />
+        </TransparentContainer>
+      </SongContainer>
+    </Container>
   );
 }
 

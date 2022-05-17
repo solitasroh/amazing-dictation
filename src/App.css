@@ -7,3 +7,8 @@
     font-family: vitro_core;
     src: url('./Assets/fonts/vitro_core.ttf');
 }
+
+@font-face{
+    font-family: nice;
+    src: url('./Assets/fonts/nice.ttf');
+}

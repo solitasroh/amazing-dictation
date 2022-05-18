@@ -1,11 +1,10 @@
 import { Button, Input } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import Countdown from 'react-countdown';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MusicPlay from '../../Components/MusicPlay';
-import NoteLogo from '../../Assets/ping.png'
 import CountDown from '../../Components/CountDown';
+import SongInfo from '../../Components/SongInfo';
 
 interface Props {
   id: number;
@@ -13,16 +12,9 @@ interface Props {
 interface SongProps{
   singer : string;
   title : string;
+  lyrics : string;
 }
-const Logo = styled.img`
-  width: 20px;
-  height: 40px;
-`;
-const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;  
-  width: 90%;
-`;
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -92,33 +84,7 @@ const CounterContainer = styled.div`
   color: #970c0c;
   animation: ${CounterAnimation} 10 1s;
 `;
-const TitleContainer = styled.div`
-  display: flex;
-  width: 130px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
-  border-radius: 4px;
-  transform: skew(-20deg);
-`;
-const TextBox = styled.div`
-  display: flex;
-  position: absolute;
-  font-family: 'cookie_bold';
-  font-style: normal;
-  transform: skew(20deg);
-`;
-const SingerContainer = styled.div`
-display: flex;
-width: 100px;
-height: 20px;
-align-items: center;
-justify-content: center;
-background-color: #ffc400;
-border-radius: 4px;
-transform: skew(-20deg);
-`;
+
 const InputContainer = styled.div`
   display: flex;
 `;
@@ -132,15 +98,14 @@ function PlayPage({ id }: Props): React.ReactElement {
     [ 11, 12, 13, 14, 15, 16, 17, 18, 19,20]
   ];
   const songId = new Array<number>();
-  const lyrics = '나는 훗훗훗';
   const [lyricsShowing, setLyricsShowing] = useState(true);
   const onChange = (value: string) => {
     inputValue.current = value;
   };
 
   const checkAnswer = (): void => {
-    const answer = lyrics === inputValue.current;
-    navigate(`/Game/Result`, { state: { answer, lyrics } });
+    const answer = songInfo.lyrics === inputValue.current;
+    navigate(`/Game/Result`, { state: { answer, songInfo} });
   };
 
   useEffect(()=>{
@@ -158,11 +123,7 @@ function PlayPage({ id }: Props): React.ReactElement {
               <CounterContainer>                
                 <CountDown time={1000} onComplete={checkAnswer} />
               </CounterContainer>              
-              <LogoContainer>
-                <Logo src={NoteLogo} />
-                  <TitleContainer><TextBox>{songInfo.title}</TextBox></TitleContainer>
-                  <SingerContainer><TextBox>{songInfo.singer}</TextBox></SingerContainer>
-              </LogoContainer>
+              <SongInfo title={songInfo?.title} singer={songInfo?.singer}/>
               <LyricsContainer>
                 <ShowLyrics>
                   넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!

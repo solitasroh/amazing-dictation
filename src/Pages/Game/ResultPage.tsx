@@ -6,7 +6,11 @@ import styled from 'styled-components';
 interface Props {
   id: number;
 }
-
+interface SongProps{
+  singer : string;
+  title : string;
+  lyrics : string;
+}
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -61,7 +65,7 @@ const ButtonBox = styled.button`
 function ResultPage({ id }: Props): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = location?.state as { answer: boolean; lyrics: string };
+  const data = location?.state as { answer: boolean; songInfo: SongProps };
   const result = data?.answer ? '정답' : '실패';
   const [nextStage, setNextStage] = useState('');
 
@@ -74,7 +78,7 @@ function ResultPage({ id }: Props): React.ReactElement {
   }, []);
   const onClick = () => {
     if (result === '실패') {
-      navigate(`/Game/Hint`, { state: data?.lyrics });
+      navigate(`/Game/Hint`, { state: data?.songInfo });
     } else {
       navigate(`/Game/Loading`);
     }

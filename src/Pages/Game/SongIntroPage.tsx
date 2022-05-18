@@ -85,7 +85,8 @@ const CircleContainer = styled.div`
 function SongIntroPage({ id }: Props): React.ReactElement {
   const songInfo = {
     singer : "소녀시대",
-    title : "HOOK"
+    title :  "HOOK",
+    lyrics : "나는 훗훗훗"
   }
   const navigate = useNavigate();
 

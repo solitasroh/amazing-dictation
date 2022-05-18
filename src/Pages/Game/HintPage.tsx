@@ -5,6 +5,11 @@ import styled from 'styled-components';
 interface Props {
   id: number;
 }
+interface SongProps{
+  singer : string;
+  title : string;
+  lyrics : string;
+}
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -49,7 +54,7 @@ const HintBox = styled.div`
 `;
 function HintPage({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as { lyrics: string };
+  const word = location?.state as  SongProps;
   console.log(word);
   const navigate = useNavigate();
   return (

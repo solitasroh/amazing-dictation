@@ -13,27 +13,51 @@ const Container = styled.div`
   height: 400px;
   flex-direction: column;
   align-items: center;
+  justify-content: space-around;
+`;
+
+const TransparentContainer = styled.div`
+position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  height: 200px;
+  align-items: center;
   justify-content: center;
-  background: #979797;
+  background: rgba(238, 238, 238, 0.86);
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);
+  backdrop-filter: blur(30px);    
+  border-radius: 10px;
 `;
 const TitleContainer = styled.div`
   color: #ffffff;
   align-items: center;
-  font-family: 'JejuHallasan';
+  font-family: 'cookie_bold';
   font-style: normal;
   font-weight: 400;
   font-size: 128px;
   line-height: 129px;
+  color: #FFC107;
+  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 1px;
 `;
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 60px;
-  line-height: 129px;
+  
 `;
-
+const ButtonBox = styled.button`
+  font-style: normal;
+  font-family: 'cookie_reg';
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 129px;
+  color :white;
+  background: rgba(0, 0, 0, 0.1);  
+  -webkit-text-stroke-color: black;
+  -webkit-text-stroke-width: 1px;
+  border-radius: 4px;
+`;
 function ResultPage({ id }: Props): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,9 +67,9 @@ function ResultPage({ id }: Props): React.ReactElement {
 
   useEffect(() => {
     if (result === '실패') {
-      setNextStage('힌트를 볼까요?');
+      setNextStage('힌트를 볼까요?>>>');
     } else {
-      setNextStage('다음 게임으로?');
+      setNextStage('다음 게임으로?>>>');
     }
   }, []);
   const onClick = () => {
@@ -58,12 +82,14 @@ function ResultPage({ id }: Props): React.ReactElement {
   return (
     <>
       <Container>
-        <TitleContainer>{result}</TitleContainer>
+        <TransparentContainer>
+          <TitleContainer>{result}</TitleContainer>
+        </TransparentContainer>
       </Container>
       <ButtonContainer>
-        <Button type="primary" onClick={onClick}>
+        <ButtonBox onClick={onClick}>
           {nextStage}
-        </Button>
+        </ButtonBox>
       </ButtonContainer>
     </>
   );

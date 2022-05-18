@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
+import ReplayBtn from '../../../Components/ReplayBtn';
+import SongInfo from '../../../Components/SongInfo';
 
 interface Props {
   id: number;
+}
+interface SongProps{
+  singer : string;
+  title : string;
+  lyrics : string;
 }
 const Container = styled.div`
   display: flex;
@@ -12,7 +19,17 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #979797;
+`;
+const TransparentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 90%;
+  align-items: center;
+  justify-content: space-around;
+  background: rgba(135, 135, 135, 0.86);
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
+  border-radius: 10px;
 `;
 const LyricsContainer = styled.div`
   display: flex;
@@ -20,14 +37,16 @@ const LyricsContainer = styled.div`
 `;
 const WordsBox = styled.div`
   display: flex;
+  font-family: 'cookie_reg';
   font-size: 25px;
   width: 30px;
   height: 30px;
   margin: 2px;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ffe600;
-  color: #ffffff;
+  border: 2px solid #ffe600;
+  background-color: white;
+  border-radius: 5px;
 `;
 const SecretAnimation = keyframes`
  from {   
@@ -53,8 +72,8 @@ const SecretWordsBox = styled.div`
 `;
 function SpacingHint({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as string;
-  const lyrics = Array.from(word);
+  const word = location?.state as SongProps;
+  const lyrics = Array.from(word.lyrics);
   const countArray = new Array<number>();
   let count = 0;
   for (let i = 0; i < lyrics.length; i += 1) {
@@ -67,15 +86,19 @@ function SpacingHint({ id }: Props): React.ReactElement {
   }
   return (
     <Container>
-      <LyricsContainer>
-        {lyrics.map((value, index) =>
-          lyrics[index] !== ' ' ? (
-            <WordsBox key={value}>{countArray[index]}</WordsBox>
-          ) : (
-            <SecretWordsBox key={value} />
-          ),
-        )}
-      </LyricsContainer>
+      <TransparentContainer>
+        <SongInfo title={word?.title} singer={word?.singer}/>
+        <LyricsContainer>
+          {lyrics.map((value, index) =>
+            lyrics[index] !== ' ' ? (
+              <WordsBox key={value}>{countArray[index]}</WordsBox>
+            ) : (
+              <SecretWordsBox key={value} />
+            ),
+          )}
+        </LyricsContainer>
+        <ReplayBtn title={word.title} singer={word.singer} lyrics = {word.lyrics}/>
+      </TransparentContainer>
     </Container>
   );
 }

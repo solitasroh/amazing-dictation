@@ -12,3 +12,13 @@
     font-family: nice;
     src: url('./Assets/fonts/nice.ttf');
 }
+
+@font-face{
+    font-family: cookie_bold;
+    src: url('./Assets/fonts/CookieRun_Bold.ttf');
+}
+
+@font-face{
+    font-family: cookie_reg;
+    src: url('./Assets/fonts/CookieRun_Regular.ttf');
+}

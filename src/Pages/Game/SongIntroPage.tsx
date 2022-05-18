@@ -83,10 +83,14 @@ const CircleContainer = styled.div`
 `;
 
 function SongIntroPage({ id }: Props): React.ReactElement {
+  const songInfo = {
+    singer : "소녀시대",
+    title : "HOOK"
+  }
   const navigate = useNavigate();
 
   const onComplete = (): void => {
-    navigate(`/Game/Play`);
+    navigate(`/Game/Play`, {state : songInfo});
   };
   return (
     <Container>
@@ -97,20 +101,21 @@ function SongIntroPage({ id }: Props): React.ReactElement {
         <TransparentContainer>
           <TitleContainer>
             <TitleBox style={{ position: 'relative' }} color="#ffffff">
-              소녀시대
+            {songInfo.singer}
               <TitleBox
                 style={{ position: 'absolute', top: 40 }}
                 color=" #decd33"
               >
-                Hook
+                {songInfo.title}
               </TitleBox>
             </TitleBox>
           </TitleContainer>
-          <CircleContainer onAnimationEnd={onComplete}/>
+          <CircleContainer />
           <CountDown 
           position= 'absolute'
           bottom= {30}
           time ={3}
+          onComplete={onComplete}
           />
         </TransparentContainer>
       </SongContainer>

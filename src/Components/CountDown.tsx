@@ -5,6 +5,7 @@ interface Props{
     time:number;
     bottom ?: number;
     position?:string;
+    onComplete :()=>void;
 }
 interface ContainerProps{
     bottom ?: number;
@@ -21,7 +22,7 @@ const Container = styled.div<ContainerProps>`
     -webkit-text-stroke-color: #ff5f5f;
     -webkit-text-stroke-width: 1px;
 `
-export default function CountDown({time,bottom,position} :Props) {
+export default function CountDown({time,bottom,position,onComplete} :Props) {
     const [second,setSecond] = useState<number>(time);
     
     useEffect(()=>{
@@ -30,8 +31,12 @@ export default function CountDown({time,bottom,position} :Props) {
                 setSecond(sec => sec-1);
             }
         },1000);
+
+        if(second ===0)
+            onComplete();
         return () => clearInterval(countdown);
     },[second])
+
   return (
     <Container bottom={bottom} position={position}>{second}</Container>
   )

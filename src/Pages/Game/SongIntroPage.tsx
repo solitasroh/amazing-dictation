@@ -86,7 +86,8 @@ function SongIntroPage({ id }: Props): React.ReactElement {
   const songInfo = {
     singer : "소녀시대",
     title :  "HOOK",
-    lyrics : "나는 훗훗훗"
+    lyrics : "나는 훗훗훗",
+    questionTime : 10
   }
   const navigate = useNavigate();
 

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import { Button, Input } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
@@ -5,6 +6,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MusicPlay from '../../Components/MusicPlay';
 import CountDown from '../../Components/CountDown';
 import SongInfo from '../../Components/SongInfo';
+import Music from '../../Assets/Song/BOM.mp3'
+import ModalCountDown from '../../Components/ModalCountDown';
 
 interface Props {
   id: number;
@@ -13,6 +16,7 @@ interface SongProps{
   singer : string;
   title : string;
   lyrics : string;
+  questionTime : number;
 }
 
 const Container = styled.div`
@@ -21,7 +25,7 @@ const Container = styled.div`
   height: 400px;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 `;
 const TransparentContainer = styled.div`
   display: flex;
@@ -87,6 +91,9 @@ const CounterContainer = styled.div`
 
 const InputContainer = styled.div`
   display: flex;
+  width: 90%;
+  align-items: center;
+  justify-content: center;
 `;
 function PlayPage({ id }: Props): React.ReactElement {
   const location = useLocation();
@@ -98,12 +105,41 @@ function PlayPage({ id }: Props): React.ReactElement {
     [ 11, 12, 13, 14, 15, 16, 17, 18, 19,20]
   ];
   const songId = new Array<number>();
-  const [lyricsShowing, setLyricsShowing] = useState(true);
+  const [lyricsShowing, setLyricsShowing] = useState(true);    
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [runningTime, setRunningTime] = useState(0);
+  const pauseTime = useRef(0);
+  const audio = new Audio(Music);  
+
+  useEffect(() => {
+    const interval = setInterval(() => {      
+      if(Math.floor(audio.currentTime) === songInfo.questionTime)
+      {
+        audio.pause();
+        setIsModalVisible(true);
+        clearInterval(interval);
+        pauseTime.current = audio.currentTime;
+      }
+      else{        
+        setRunningTime(runningTime);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [runningTime]);
+
+  const pauseEnd = () =>{
+    setIsModalVisible(false);    
+    audio.currentTime = pauseTime.current;
+    audio.play();
+  }
   const onChange = (value: string) => {
     inputValue.current = value;
   };
 
   const checkAnswer = (): void => {
+    audio.pause();
     const answer = songInfo.lyrics === inputValue.current;
     navigate(`/Game/Result`, { state: { answer, songInfo} });
   };
@@ -113,18 +149,21 @@ function PlayPage({ id }: Props): React.ReactElement {
     {
       songId.push(i);
     }
+    audio.play();
+    setRunningTime(audio.currentTime);
   },[]);
-  return (
-    <>
+
+  return (    
       <Container>
         <TransparentContainer>
           {lyricsShowing ? (
-            <>
+            <>            
               <CounterContainer>                
-                <CountDown time={1000} onComplete={checkAnswer} />
+                <CountDown time={1000} onComplete={checkAnswer} size={30}/>
               </CounterContainer>              
               <SongInfo title={songInfo?.title} singer={songInfo?.singer}/>
               <LyricsContainer>
+                <ModalCountDown time={3} isVisible={isModalVisible} onEnd ={pauseEnd}/>
                 <ShowLyrics>
                   넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!
                   Shoot! Shoot! 나는 훗! 훗! 훗!
@@ -146,14 +185,14 @@ function PlayPage({ id }: Props): React.ReactElement {
             </RowContainer>
           )}
         </TransparentContainer>
-      </Container>
       <InputContainer>
         <Input onChange={e => onChange(e.target.value)} />
         <Button type="primary" onClick={checkAnswer}>
           submit
         </Button>
       </InputContainer>
-    </>
+      </Container>
+    
   );
 }
 

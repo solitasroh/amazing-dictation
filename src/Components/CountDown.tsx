@@ -5,11 +5,13 @@ interface Props{
     time:number;
     bottom ?: number;
     position?:string;
+    size ?: number;
     onComplete :()=>void;
 }
 interface ContainerProps{
     bottom ?: number;
     position?:string;
+    size?: number;
 }
 const Container = styled.div<ContainerProps>`
     position: ${(prop)=> prop.position}; 
@@ -18,11 +20,11 @@ const Container = styled.div<ContainerProps>`
     color: #FFF2F2;
     font-family: 'nice';
     font-style: normal;
-    font-size: 20px;
+    font-size: ${(prop)=> prop.size ?? 20}px;
     -webkit-text-stroke-color: #ff5f5f;
     -webkit-text-stroke-width: 1px;
 `
-export default function CountDown({time,bottom,position,onComplete} :Props) {
+export default function CountDown({time,bottom,position,size,onComplete} :Props) {
     const [second,setSecond] = useState<number>(time);
     
     useEffect(()=>{
@@ -38,6 +40,6 @@ export default function CountDown({time,bottom,position,onComplete} :Props) {
     },[second])
 
   return (
-    <Container bottom={bottom} position={position}>{second}</Container>
+    <Container bottom={bottom} position={position} size ={size}>{second}</Container>
   )
 }

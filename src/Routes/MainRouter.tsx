@@ -13,6 +13,7 @@ import SpacingHint from '../Pages/Game/Hint/SpacingHint';
 import WordHint from '../Pages/Game/Hint/WordHint';
 import OneFifths from '../Pages/Game/Hint/OneFifths';
 import InitialConsonant from '../Pages/Game/Hint/InitialConsonant';
+import CreateGame from "../Pages/Game/CreateGame";
 
 function MainRouter() {
   const cookie = new Cookies()
@@ -33,6 +34,7 @@ function MainRouter() {
         <Route path="/Game/Hint/Spacing" element={<SpacingHint id={1} />} />
         <Route path="/Game/Hint/Word" element={<WordHint id={1} />} />
         <Route path="/Admin/InsertSong" element={<InsertSong id={1} />} />
+        <Route path="/Game/Create" element={<CreateGame id="1"/>}/>
       </Routes>
     </BrowserRouter>
   );

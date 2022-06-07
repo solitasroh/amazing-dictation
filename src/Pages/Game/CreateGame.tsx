@@ -20,6 +20,25 @@ interface CreateGameInput {
     songYoutubeLinkUrl: string;
     musicFileLinkUrl: string;
 }
+/* mutation
+mutation {
+  createGame(data: {title: "훗", singer: "소녀시대", songYoutubeLinkUrl: "https://www.youtube.com/watch?v=F4-SxcCO5d0"}) {
+    id
+    musicFileLinkUrl
+  }
+}
+ */
+
+/* result
+{
+  "data": {
+    "createGame": {
+      "id": 1,
+      "musicFileLinkUrl": "https://amazing-dict.s3.ap-northeast-2.amazonaws.com/1-1654609008264-test.mp3"
+    }
+  }
+}
+ */
 
 function CreateGame({id}: props): ReactElement {
     const onFinish = (values: any) => {

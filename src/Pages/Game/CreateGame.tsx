@@ -1,24 +1,25 @@
 import React, {ReactElement} from 'react';
 import {Input, Button, Form} from 'antd';
+import { gql, useMutation } from '@apollo/client';
 
 interface props {
     id: string
 }
 
-interface CreateGameInput {
+interface GameCreateInput {
     title: string;
     singer: string;
-    preSectionLyrics: string;
-    postSectionLyrics: string;
-    questionLyrics: string;
-    prePlaySection: string;
-    playTime: string;
+    preSectionLyrics?: string;
+    postSectionLyrics?: string;
+    questionLyrics?: string;
+    prePlaySection?: string;
+    playTime?: string;
     preSectionPlayStartTime: number;
     preSectionPlayEndTime: number;
     questionSectionPlayStartTime: number;
     questionSectionPlayEndTime: number;
     songYoutubeLinkUrl: string;
-    musicFileLinkUrl: string;
+    musicFileLinkUrl?: string;
 }
 /* mutation
 mutation {
@@ -40,9 +41,34 @@ mutation {
 }
  */
 
+const CREATE_GAME = gql`
+  mutation CreatGame($data: GameCreateInput!) {
+    createGame(data: $data) {
+        id
+        songYoutubeLinkUrl   
+    }
+  }
+`;
 function CreateGame({id}: props): ReactElement {
-    const onFinish = (values: any) => {
-        console.log(values)
+    const [createGame, { data ,error}] = useMutation(CREATE_GAME);
+    
+    const onFinish = (values: GameCreateInput) => {
+       
+        const input : GameCreateInput = {
+            title: values.title,
+            singer: values.singer,
+            preSectionLyrics: values.preSectionLyrics,
+            postSectionLyrics: values.postSectionLyrics,
+            questionLyrics: values.questionLyrics,
+            prePlaySection: values.prePlaySection,
+            preSectionPlayStartTime: parseInt(values.preSectionPlayStartTime.toString(),10),
+            preSectionPlayEndTime: parseInt(values.preSectionPlayEndTime.toString(),10),
+            questionSectionPlayStartTime: parseInt(values.questionSectionPlayStartTime.toString(), 10),
+            questionSectionPlayEndTime: parseInt(values.questionSectionPlayEndTime.toString(),10),
+            songYoutubeLinkUrl: values.songYoutubeLinkUrl,
+        };
+        console.log(input)
+        createGame({ variables: { data: input } });
     }
     const onFinishFailed = () => {
         console.log('fail')

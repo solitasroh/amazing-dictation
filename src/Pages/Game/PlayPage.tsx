@@ -8,17 +8,11 @@ import CountDown from '../../Components/CountDown';
 import SongInfo from '../../Components/SongInfo';
 import Music from '../../Assets/Song/BOM.mp3'
 import ModalCountDown from '../../Components/ModalCountDown';
+import IGame from '../../types/IGame';
 
 interface Props {
   id: number;
 }
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
-  questionTime : number;
-}
-
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -56,7 +50,7 @@ const ShowLyrics = styled.div`
 `;
 const SecretLyrics = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-family: 'cookie_reg';
 `;
 const SecretWords = styled.div`
@@ -98,22 +92,20 @@ const InputContainer = styled.div`
 function PlayPage({ id }: Props): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
-  const songInfo = location?.state as SongProps;
-  const inputValue = useRef<string>('');
-  const secretSong = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    [ 11, 12, 13, 14, 15, 16, 17, 18, 19,20]
-  ];
+  const songInfo = location?.state as IGame;
+  const inputValue = useRef<string>('');  
   const songId = new Array<number>();
-  const [lyricsShowing, setLyricsShowing] = useState(true);    
+  const secretSong = Array.from(songInfo.questionLyrics as string);
+  const [lyricsShowing, setLyricsShowing] = useState(false);    
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [runningTime, setRunningTime] = useState(0);
   const pauseTime = useRef(0);
-  const audio = new Audio(Music);  
+  const countTime = songInfo.questionSectionPlayEndTime as number;
+  const audio = new Audio(songInfo.musicFileLinkUrl);  
 
   useEffect(() => {
     const interval = setInterval(() => {      
-      if(Math.floor(audio.currentTime) === songInfo.questionTime)
+      if(Math.floor(audio.currentTime) === songInfo.questionSectionPlayStartTime)
       {
         audio.pause();
         setIsModalVisible(true);
@@ -121,6 +113,10 @@ function PlayPage({ id }: Props): React.ReactElement {
         pauseTime.current = audio.currentTime;
       }
       else{        
+        if(Math.floor(audio.currentTime) === songInfo.preSectionPlayStartTime)
+        {
+          setLyricsShowing(true);
+        }
         setRunningTime(runningTime);
       }
     }, 1000);
@@ -140,7 +136,7 @@ function PlayPage({ id }: Props): React.ReactElement {
 
   const checkAnswer = (): void => {
     audio.pause();
-    const answer = songInfo.lyrics === inputValue.current;
+    const answer = songInfo.questionLyrics === inputValue.current;
     navigate(`/Game/Result`, { state: { answer, songInfo} });
   };
 
@@ -159,23 +155,27 @@ function PlayPage({ id }: Props): React.ReactElement {
           {lyricsShowing ? (
             <>            
               <CounterContainer>                
-                <CountDown time={1000} onComplete={checkAnswer} size={30}/>
+                <CountDown time={countTime + 10} onComplete={checkAnswer} size={30}/>
               </CounterContainer>              
               <SongInfo title={songInfo?.title} singer={songInfo?.singer}/>
               <LyricsContainer>
                 <ModalCountDown time={3} isVisible={isModalVisible} onEnd ={pauseEnd}/>
                 <ShowLyrics>
-                  넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!
-                  Shoot! Shoot! 나는 훗! 훗! 훗!
+                  {songInfo.preSectionLyrics}
                 </ShowLyrics>
                 <SecretLyrics>
-                  {secretSong.map((value,index) =>(<RowContainer key={songId[index]}>{
+                  {/* {secretSong.map((value,index) =>(<RowContainer key={songId[index]}>{
                     value.map(value1 => <SecretWords key={value1}>{value1}</SecretWords>)}</RowContainer>
-                  ))}
+                  ))} */
+                  secretSong.map((value,index) =>
+                  (<RowContainer  key={songId[index]}>
+                    <SecretWords >{index}</SecretWords></RowContainer>
+                  ))
+                }
+
                 </SecretLyrics>
                 <ShowLyrics>
-                  넌 역시 Trouble! Trouble! Trouble! 때를 노렸어 너는 Shoot!
-                  Shoot! Shoot! 나는 훗! 훗! 훗!
+                  {songInfo.postSectionLyrics}
                 </ShowLyrics>
               </LyricsContainer>
             </>

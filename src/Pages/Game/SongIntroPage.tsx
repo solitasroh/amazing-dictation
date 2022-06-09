@@ -1,8 +1,10 @@
+import { gql, useQuery } from '@apollo/client';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import LogoImg from '../../Assets/Logo.png';
 import CountDown from '../../Components/CountDown';
+import IGame from '../../types/IGame';
 
 interface Props {
   id: number;
@@ -11,7 +13,13 @@ interface Props {
 interface colorProps {
   color: string;
 }
+interface GameArguement {
+  id: number
+ }
 
+interface GameData {
+  game: IGame;
+}
 const boxAnimation = keyframes`
  from {   
   transform: rotate(0deg);
@@ -82,17 +90,37 @@ const CircleContainer = styled.div`
   animation: ${boxAnimation} 3 1s;
 `;
 
-function SongIntroPage({ id }: Props): React.ReactElement {
-  const songInfo = {
-    singer : "소녀시대",
-    title :  "HOOK",
-    lyrics : "나는 훗훗훗",
-    questionTime : 10
-  }
-  const navigate = useNavigate();
+const QUERY_GAME =  gql`
+    query game($id :Int!){
+      game(id : $id) {
+          title
+          singer
+          preSectionLyrics
+          postSectionLyrics
+          questionLyrics
+          prePlaySection
+          preSectionPlayStartTime
+          preSectionPlayEndTime
+          questionSectionPlayStartTime
+          questionSectionPlayEndTime
+          musicFileLinkUrl
+      }
+}`;
 
+function SongIntroPage({ id }: Props): React.ReactElement {
+  const navigate = useNavigate();
+  const location = useLocation();  
+  const GameID = location?.state as number;  
+  const { loading, error, data } = useQuery<GameData,GameArguement>(QUERY_GAME,{
+    variables : { id: GameID }
+  });
+
+  if (!loading){  
+    console.log(data);
+    console.log(data?.game.musicFileLinkUrl);
+  }  
   const onComplete = (): void => {
-    navigate(`/Game/Play`, {state : songInfo});
+    navigate(`/Game/Play`, {state : data?.game});
   };
   return (
     <Container>
@@ -103,12 +131,12 @@ function SongIntroPage({ id }: Props): React.ReactElement {
         <TransparentContainer>
           <TitleContainer>
             <TitleBox style={{ position: 'relative' }} color="#ffffff">
-            {songInfo.singer}
+            {data?.game.singer}
               <TitleBox
                 style={{ position: 'absolute', top: 40 }}
                 color=" #decd33"
               >
-                {songInfo.title}
+                {data?.game.title}
               </TitleBox>
             </TitleBox>
           </TitleContainer>

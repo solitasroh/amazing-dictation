@@ -3,12 +3,13 @@ import { Button, Input } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {useQuery} from "@apollo/client";
-import {QUERY_GAMES} from "../../api-client";
+import { useQuery } from '@apollo/client';
+import { QUERY_GAMES } from '../../api-client';
 
 interface Props {
   id: number;
 }
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -18,6 +19,7 @@ const Container = styled.div`
   justify-content: space-around;
   background: #979797;
 `;
+
 const TitleContainer = styled.div`
   display: flex;
   width: 500px;
@@ -34,6 +36,7 @@ const TitleContainer = styled.div`
   line-height: 77px;
   color: #ffffff;
 `;
+
 const InputContainer = styled.div`
   display: flex;
 `;
@@ -41,11 +44,15 @@ const InputContainer = styled.div`
 function LoadingPage({ id }: Props): React.ReactElement {
   const navigate = useNavigate();
   const { loading, error, data } = useQuery(QUERY_GAMES);
-  
-  if (!loading){
-    const randomGameID = Math.round(Math.random() * data.games.length); 
-    setTimeout(() => navigate(`/Game/SongIntro`,{state : randomGameID}), 2000);
-  }  
+
+  if (!loading) {
+    const randomGameID = Math.round(Math.random() * data.games.length);
+    setTimeout(
+      () => navigate(`/Game/SongIntro`, { state: randomGameID }),
+      2000,
+    );
+  }
+
   return (
     <>
       <Container>

@@ -9,24 +9,29 @@ interface Props {
 interface colorProps {
   color: string;
 }
+
 const LogoContainer = styled.div`
   position: relative;
   align-items: flex-start;
 `;
+
 const Logo = styled.img`
   width: 140px;
   margin: 20px;
 `;
+
 const Container = styled.div`
   display: flex;
   width: 100%;
   height: 657px;
   flex-direction: column;
 `;
+
 const SongContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+
 const TransparentContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -36,6 +41,7 @@ const TransparentContainer = styled.div`
   justify-content: space-around;
   background: rgba(238, 238, 238, 0.86);
 `;
+
 const TitleContainer = styled.div<colorProps>`
   display: flex;
   font-style: normal;
@@ -50,6 +56,7 @@ const TitleContainer = styled.div<colorProps>`
   -webkit-text-stroke-width: 1px;
   text-shadow: 2px 4px 2px black;
 `;
+
 const StartButton = styled.div`
   display: flex;
   width: 250px;
@@ -67,6 +74,7 @@ const StartButton = styled.div`
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
 `;
+
 function InitPage({ id }: Props): React.ReactElement {
   const [over, setOver] = useState(false);
   const navigate = useNavigate();
@@ -74,6 +82,7 @@ function InitPage({ id }: Props): React.ReactElement {
   const onClick = (): void => {
     navigate(`/Game/Loading`);
   };
+
   return (
     <Container>
       <LogoContainer>

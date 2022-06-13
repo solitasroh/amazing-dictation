@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MusicPlay from '../../Components/MusicPlay';
 import CountDown from '../../Components/CountDown';
 import SongInfo from '../../Components/SongInfo';
-import Music from '../../Assets/Song/BOM.mp3'
+import Music from '../../Assets/Song/BOM.mp3';
 import ModalCountDown from '../../Components/ModalCountDown';
 import IGame from '../../types/IGame';
 import IHint from '../../types/IHint';
@@ -30,7 +30,7 @@ const TransparentContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   background: rgba(135, 135, 135, 0.86);
-  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);
   border-radius: 10px;
 `;
 const RowContainer = styled.div`
@@ -46,7 +46,7 @@ const ShowLyrics = styled.div`
   font-weight: 200;
   font-size: 20px;
   line-height: 50px;
-  color: #ffffff;  
+  color: #ffffff;
   font-family: 'cookie_reg';
 `;
 const SecretLyrics = styled.div`
@@ -90,37 +90,43 @@ const InputContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
 function PlayPage({ id }: Props): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const songInfo = location?.state as IGame;
-  const inputValue = useRef<string>('');  
+  const inputValue = useRef<string>('');
   const songId = new Array<number>();
   const secretSongArray = Array.from(songInfo.questionLyrics as string[]);
-  const secretSong = secretSongArray.map((value) => Array.from(value));  
-  const secretWord = secretSong.map((value)=> value.filter(data => data !== ' '));
-  const correct = secretWord.reduce(( accumulator, currentValue ) => accumulator.concat(currentValue),
-  []).join(''); // Correct Answer without Spacing (no array)
- 
-  const [lyricsShowing, setLyricsShowing] = useState(false);    
+  const secretSong = secretSongArray.map(value => Array.from(value));
+  const secretWord = secretSong.map(value =>
+    value.filter(data => data !== ' '),
+  );
+
+  const correct = secretWord
+    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+    .join(''); // Correct Answer without Spacing (no array)
+
+  const [lyricsShowing, setLyricsShowing] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [runningTime, setRunningTime] = useState(0);
   const pauseTime = useRef(0);
   const countTime = songInfo.questionSectionPlayEndTime as number;
-  const audio = new Audio(songInfo.musicFileLinkUrl);  
+  const audio = new Audio(songInfo.musicFileLinkUrl);
 
   useEffect(() => {
-    const interval = setInterval(() => {      
-      if(Math.floor(audio.currentTime) === songInfo.questionSectionPlayStartTime)
-      {
+    const interval = setInterval(() => {
+      if (
+        Math.floor(audio.currentTime) === songInfo.questionSectionPlayStartTime
+      ) {
         audio.pause();
         setIsModalVisible(true);
         clearInterval(interval);
         pauseTime.current = audio.currentTime;
-      }
-      else{        
-        if(Math.floor(audio.currentTime) === songInfo.preSectionPlayStartTime)
-        {
+      } else {
+        if (
+          Math.floor(audio.currentTime) === songInfo.preSectionPlayStartTime
+        ) {
           setLyricsShowing(true);
         }
         setRunningTime(runningTime);
@@ -131,74 +137,83 @@ function PlayPage({ id }: Props): React.ReactElement {
     };
   }, [runningTime]);
 
-  const pauseEnd = () =>{
-    setIsModalVisible(false);    
+  const pauseEnd = () => {
+    setIsModalVisible(false);
     audio.currentTime = pauseTime.current;
     audio.play();
-  }
+  };
   const onChange = (value: string) => {
     inputValue.current = value;
   };
 
   const checkAnswer = (): void => {
     audio.pause();
-    const answer = correct === inputValue.current.replace(/(\s*)/g, "");
-    const Info : IHint = {title:songInfo.title , singer:songInfo.singer, Lyrics : secretSong,
-                          key : songId};
-    navigate(`/Game/Result`, { state: { answer, Info , songInfo} });
+    const answer = correct === inputValue.current.replace(/(\s*)/g, '');
+    const Info: IHint = {
+      title: songInfo.title,
+      singer: songInfo.singer,
+      Lyrics: secretSong,
+      key: songId,
+    };
+    navigate(`/Game/Result`, { state: { answer, Info, songInfo } });
   };
 
-  useEffect(()=>{
-    for(let i =0; i<secretWord.length; i+=1)
-    {
-      for(let j =0; j<secretWord[i].length; j+=1)
-        songId.push(j + (i*secretWord[i].length));
+  useEffect(() => {
+    for (let i = 0; i < secretWord.length; i += 1) {
+      for (let j = 0; j < secretWord[i].length; j += 1)
+        songId.push(j + i * secretWord[i].length);
     }
     audio.play();
     setRunningTime(audio.currentTime);
-  },[]);
+  }, []);
 
-  return (    
-      <Container>
-        <TransparentContainer>
-          {lyricsShowing ? (
-            <>            
-              <CounterContainer>                
-                <CountDown time={countTime + 10} onComplete={checkAnswer} size={30}/>
-              </CounterContainer>              
-              <SongInfo title={songInfo?.title} singer={songInfo?.singer}/>
-              <LyricsContainer>
-                <ModalCountDown time={3} isVisible={isModalVisible} onEnd ={pauseEnd}/>
-                <ShowLyrics>
-                  {songInfo.preSectionLyrics}
-                </ShowLyrics>
-                <SecretLyrics>
-                  { secretWord.map((value,index) =>(<RowContainer key={songId[index]}>{
-                    value.map((value1,ind) => <SecretWords key={songId[ind + (index*ind)]}>
-                      {ind + (secretWord[index].length*index) + 1}</SecretWords>)}</RowContainer>
-                  )) 
-                }
-
-                </SecretLyrics>
-                <ShowLyrics>
-                  {songInfo.postSectionLyrics}
-                </ShowLyrics>
-              </LyricsContainer>
-            </>
-          ) : (
-            <RowContainer>
-              <MusicPlay />
-            </RowContainer>
-          )}
-        </TransparentContainer>
+  return (
+    <Container>
+      <TransparentContainer>
+        {lyricsShowing ? (
+          <>
+            <CounterContainer>
+              <CountDown
+                time={countTime + 10}
+                onComplete={checkAnswer}
+                size={30}
+              />
+            </CounterContainer>
+            <SongInfo title={songInfo?.title} singer={songInfo?.singer} />
+            <LyricsContainer>
+              <ModalCountDown
+                time={3}
+                isVisible={isModalVisible}
+                onEnd={pauseEnd}
+              />
+              <ShowLyrics>{songInfo.preSectionLyrics}</ShowLyrics>
+              <SecretLyrics>
+                {secretWord.map((value, index) => (
+                  <RowContainer key={songId[index]}>
+                    {value.map((value1, ind) => (
+                      <SecretWords key={songId[ind + index * ind]}>
+                        {ind + secretWord[index].length * index + 1}
+                      </SecretWords>
+                    ))}
+                  </RowContainer>
+                ))}
+              </SecretLyrics>
+              <ShowLyrics>{songInfo.postSectionLyrics}</ShowLyrics>
+            </LyricsContainer>
+          </>
+        ) : (
+          <RowContainer>
+            <MusicPlay />
+          </RowContainer>
+        )}
+      </TransparentContainer>
       <InputContainer>
         <Input onChange={e => onChange(e.target.value)} />
         <Button type="primary" onClick={checkAnswer}>
           submit
         </Button>
       </InputContainer>
-      </Container>
-    
+    </Container>
   );
 }
 

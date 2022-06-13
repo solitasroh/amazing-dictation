@@ -11,6 +11,7 @@ module.exports = {
     'eslint-config-prettier',
     'plugin:import/errors',
     'plugin:import/warnings',
+    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -20,7 +21,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     // 'prettier/prettier': [
     //   'error',
@@ -52,11 +53,11 @@ module.exports = {
     'react/jsx-wrap-multilines': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'prettier/prettier': [
-      "error",
+      'error',
       {
-        "endOfLine": "auto"
-      }
-    ]
+        endOfLine: 'auto',
+      },
+    ],
   },
   settings: {
     react: {

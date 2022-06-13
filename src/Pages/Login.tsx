@@ -35,7 +35,6 @@ function Login() {
   const navigate = useNavigate();
 
   const onClick = (): void => {
-    console.log('button click!');
     navigate(`/Game/Init`);
   };
 

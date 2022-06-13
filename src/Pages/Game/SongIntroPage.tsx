@@ -1,5 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
 import React from 'react';
+import { gql, useQuery } from '@apollo/client';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import LogoImg from '../../Assets/Logo.png';
@@ -13,13 +13,15 @@ interface Props {
 interface colorProps {
   color: string;
 }
+
 interface GameArguement {
-  id: number
- }
+  id: number;
+}
 
 interface GameData {
   game: IGame;
 }
+
 const boxAnimation = keyframes`
  from {   
   transform: rotate(0deg);
@@ -43,7 +45,7 @@ const Container = styled.div`
   flex-direction: column;
 `;
 const TransparentContainer = styled.div`
-position: relative;
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 500px;
@@ -85,41 +87,47 @@ const CircleContainer = styled.div`
   align-items: center;
   border-radius: 50%;
   border-top: 3px solid;
-  border-top-color: 
-    #ff5f43;
+  border-top-color: #ff5f43;
   animation: ${boxAnimation} 3 1s;
 `;
 
-const QUERY_GAME =  gql`
-    query game($id :Int!){
-      game(id : $id) {
-          title
-          singer
-          preSectionLyrics
-          postSectionLyrics
-          questionLyrics
-          preSectionPlayStartTime
-          preSectionPlayEndTime
-          questionSectionPlayStartTime
-          questionSectionPlayEndTime
-          musicFileLinkUrl
-      }
-}`;
+const QUERY_GAME = gql`
+  query game($id: Int!) {
+    game(id: $id) {
+      title
+      singer
+      preSectionLyrics
+      postSectionLyrics
+      questionLyrics
+      preSectionPlayStartTime
+      preSectionPlayEndTime
+      questionSectionPlayStartTime
+      questionSectionPlayEndTime
+      musicFileLinkUrl
+    }
+  }
+`;
 
 function SongIntroPage({ id }: Props): React.ReactElement {
   const navigate = useNavigate();
-  const location = useLocation();  
-  const GameID = location?.state as number;  
-  const { loading, error, data } = useQuery<GameData,GameArguement>(QUERY_GAME,{
-    variables : { id: GameID }
-  });
+  const location = useLocation();
+  const GameID = location?.state as number;
 
-  if (!loading){  
+  const { loading, error, data } = useQuery<GameData, GameArguement>(
+    QUERY_GAME,
+    {
+      variables: { id: GameID },
+    },
+  );
+
+  if (!loading) {
     console.log(data);
-  }  
+  }
+
   const onComplete = (): void => {
-    navigate(`/Game/Play`, {state : data?.game});
+    navigate(`/Game/Play`, { state: data?.game });
   };
+
   return (
     <Container>
       <LogoContainer>
@@ -129,7 +137,7 @@ function SongIntroPage({ id }: Props): React.ReactElement {
         <TransparentContainer>
           <TitleContainer>
             <TitleBox style={{ position: 'relative' }} color="#ffffff">
-            {data?.game.singer}
+              {data?.game.singer}
               <TitleBox
                 style={{ position: 'absolute', top: 40 }}
                 color=" #decd33"
@@ -139,11 +147,11 @@ function SongIntroPage({ id }: Props): React.ReactElement {
             </TitleBox>
           </TitleContainer>
           <CircleContainer />
-          <CountDown 
-          position= 'absolute'
-          bottom= {30}
-          time ={3}
-          onComplete={onComplete}
+          <CountDown
+            position="absolute"
+            bottom={30}
+            time={3}
+            onComplete={onComplete}
           />
         </TransparentContainer>
       </SongContainer>

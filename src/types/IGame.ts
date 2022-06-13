@@ -4,8 +4,7 @@ export default interface IGame {
     singer: string;
     preSectionLyrics?: string;
     postSectionLyrics?: string;
-    questionLyrics?: string;
-    prePlaySection?: string;
+    questionLyrics?: string[];
     preSectionPlayStartTime?: number;
     preSectionPlayEndTime?: number;
     questionSectionPlayStartTime?: number;

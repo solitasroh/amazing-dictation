@@ -1,12 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
-}
+import IGame from '../types/IGame';
 
 const ButtonBox = styled.div`
   display: flex;
@@ -26,7 +21,7 @@ const ButtonBox = styled.div`
   cursor: pointer;
 `;
 
-export default function ReplayBtn( songInfo:SongProps) {
+export default function ReplayBtn(songInfo:IGame) {
     const navigate = useNavigate();
 
     const onClick = (): void => {

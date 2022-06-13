@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
 import ReplayBtn from '../../../Components/ReplayBtn';
 import SongInfo from '../../../Components/SongInfo';
+import IGame from '../../../types/IGame';
+import IHint from '../../../types/IHint';
 
 interface Props {
   id: number;
@@ -34,6 +36,10 @@ const TransparentContainer = styled.div`
 const LyricsContainer = styled.div`
   display: flex;
   align-items: center;
+  flex-direction: column;
+`;
+const RowContainer = styled.div`
+  display: flex;
 `;
 const WordsBox = styled.div`
   display: flex;
@@ -72,32 +78,34 @@ const SecretWordsBox = styled.div`
 `;
 function SpacingHint({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as SongProps;
-  const lyrics = Array.from(word.lyrics);
-  const countArray = new Array<number>();
-  let count = 0;
-  for (let i = 0; i < lyrics.length; i += 1) {
-    if (lyrics[i] !== ' ') {
-      count += 1;
-      countArray.push(count);
-    } else {
-      countArray.push(0);
-    }
-  }
+  const word = location?.state as {Info: IHint ; songInfo :IGame};
+  const lyrics = word?.Info.Lyrics;
+  const countArray = word.Info.key;
+
   return (
     <Container>
       <TransparentContainer>
-        <SongInfo title={word?.title} singer={word?.singer}/>
+        <SongInfo title={word?.Info.title} singer={word?.Info.singer}/>
         <LyricsContainer>
           {lyrics.map((value, index) =>
-            lyrics[index] !== ' ' ? (
-              <WordsBox key={value}>{countArray[index]}</WordsBox>
-            ) : (
-              <SecretWordsBox key={value} />
-            ),
-          )}
+          <RowContainer key={countArray[index]}>
+            {value.map((value1,ind) => 
+            value1 !== ' ' ? 
+            (<WordsBox key={countArray[ind + (index*ind)]}>
+            {ind + (lyrics[index].length*index) + 1}</WordsBox>)
+            : (<SecretWordsBox key={countArray[ind + (index*ind)]} />))}          
+            </RowContainer>)}
         </LyricsContainer>
-        <ReplayBtn title={word.title} singer={word.singer} lyrics = {word.lyrics}/>
+        <ReplayBtn id={word.songInfo.id} title={word.Info.title} singer={word.Info.singer} 
+          preSectionLyrics={ word.songInfo.preSectionLyrics}
+          postSectionLyrics={word.songInfo.postSectionLyrics}
+          questionLyrics={word.songInfo.questionLyrics}
+          preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
+          preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
+          questionSectionPlayStartTime={word.songInfo.questionSectionPlayStartTime}
+          questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
+          songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
+          musicFileLinkUrl ={word.songInfo.musicFileLinkUrl}/>
       </TransparentContainer>
     </Container>
   );

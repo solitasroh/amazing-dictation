@@ -11,9 +11,7 @@ interface GameCreateInput {
     singer: string;
     preSectionLyrics?: string;
     postSectionLyrics?: string;
-    questionLyrics?: string;
-    prePlaySection?: string;
-    playTime?: string;
+    questionLyrics?: string[];
     preSectionPlayStartTime: number;
     preSectionPlayEndTime: number;
     questionSectionPlayStartTime: number;
@@ -60,7 +58,6 @@ function CreateGame({id}: props): ReactElement {
             preSectionLyrics: values.preSectionLyrics,
             postSectionLyrics: values.postSectionLyrics,
             questionLyrics: values.questionLyrics,
-            prePlaySection: values.prePlaySection,
             preSectionPlayStartTime: parseInt(values.preSectionPlayStartTime.toString(),10),
             preSectionPlayEndTime: parseInt(values.preSectionPlayEndTime.toString(),10),
             questionSectionPlayStartTime: parseInt(values.questionSectionPlayStartTime.toString(), 10),

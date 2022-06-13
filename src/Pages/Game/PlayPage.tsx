@@ -9,6 +9,7 @@ import SongInfo from '../../Components/SongInfo';
 import Music from '../../Assets/Song/BOM.mp3'
 import ModalCountDown from '../../Components/ModalCountDown';
 import IGame from '../../types/IGame';
+import IHint from '../../types/IHint';
 
 interface Props {
   id: number;
@@ -50,7 +51,7 @@ const ShowLyrics = styled.div`
 `;
 const SecretLyrics = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   font-family: 'cookie_reg';
 `;
 const SecretWords = styled.div`
@@ -95,7 +96,12 @@ function PlayPage({ id }: Props): React.ReactElement {
   const songInfo = location?.state as IGame;
   const inputValue = useRef<string>('');  
   const songId = new Array<number>();
-  const secretSong = Array.from(songInfo.questionLyrics as string);
+  const secretSongArray = Array.from(songInfo.questionLyrics as string[]);
+  const secretSong = secretSongArray.map((value) => Array.from(value));  
+  const secretWord = secretSong.map((value)=> value.filter(data => data !== ' '));
+  const correct = secretWord.reduce(( accumulator, currentValue ) => accumulator.concat(currentValue),
+  []).join(''); // Correct Answer without Spacing (no array)
+ 
   const [lyricsShowing, setLyricsShowing] = useState(false);    
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [runningTime, setRunningTime] = useState(0);
@@ -136,14 +142,17 @@ function PlayPage({ id }: Props): React.ReactElement {
 
   const checkAnswer = (): void => {
     audio.pause();
-    const answer = songInfo.questionLyrics === inputValue.current;
-    navigate(`/Game/Result`, { state: { answer, songInfo} });
+    const answer = correct === inputValue.current.replace(/(\s*)/g, "");
+    const Info : IHint = {title:songInfo.title , singer:songInfo.singer, Lyrics : secretSong,
+                          key : songId};
+    navigate(`/Game/Result`, { state: { answer, Info , songInfo} });
   };
 
   useEffect(()=>{
-    for(let i =0; i<secretSong.length; i+=1)
+    for(let i =0; i<secretWord.length; i+=1)
     {
-      songId.push(i);
+      for(let j =0; j<secretWord[i].length; j+=1)
+        songId.push(j + (i*secretWord[i].length));
     }
     audio.play();
     setRunningTime(audio.currentTime);
@@ -164,13 +173,10 @@ function PlayPage({ id }: Props): React.ReactElement {
                   {songInfo.preSectionLyrics}
                 </ShowLyrics>
                 <SecretLyrics>
-                  {/* {secretSong.map((value,index) =>(<RowContainer key={songId[index]}>{
-                    value.map(value1 => <SecretWords key={value1}>{value1}</SecretWords>)}</RowContainer>
-                  ))} */
-                  secretSong.map((value,index) =>
-                  (<RowContainer  key={songId[index]}>
-                    <SecretWords >{index}</SecretWords></RowContainer>
-                  ))
+                  { secretWord.map((value,index) =>(<RowContainer key={songId[index]}>{
+                    value.map((value1,ind) => <SecretWords key={songId[ind + (index*ind)]}>
+                      {ind + (secretWord[index].length*index) + 1}</SecretWords>)}</RowContainer>
+                  )) 
                 }
 
                 </SecretLyrics>

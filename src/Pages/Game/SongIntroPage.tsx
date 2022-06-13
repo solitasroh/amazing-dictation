@@ -98,7 +98,6 @@ const QUERY_GAME =  gql`
           preSectionLyrics
           postSectionLyrics
           questionLyrics
-          prePlaySection
           preSectionPlayStartTime
           preSectionPlayEndTime
           questionSectionPlayStartTime
@@ -117,7 +116,6 @@ function SongIntroPage({ id }: Props): React.ReactElement {
 
   if (!loading){  
     console.log(data);
-    console.log(data?.game.musicFileLinkUrl);
   }  
   const onComplete = (): void => {
     navigate(`/Game/Play`, {state : data?.game});

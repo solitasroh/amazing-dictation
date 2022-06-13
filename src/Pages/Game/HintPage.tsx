@@ -1,15 +1,13 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import IGame from '../../types/IGame';
+import IHint from '../../types/IHint';
 
 interface Props {
   id: number;
 }
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
-}
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -54,7 +52,7 @@ const HintBox = styled.div`
 `;
 function HintPage({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as  SongProps;
+  const word = location?.state as {Info: IHint ; songInfo :IGame};
   console.log(word);
   const navigate = useNavigate();
   return (

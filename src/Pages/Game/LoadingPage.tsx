@@ -3,9 +3,8 @@ import { Button, Input } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import {gql, useQuery} from "@apollo/client";
+import {useQuery} from "@apollo/client";
 import {QUERY_GAMES} from "../../api-client";
-import IGame from "../../types/IGame";
 
 interface Props {
   id: number;
@@ -45,7 +44,6 @@ function LoadingPage({ id }: Props): React.ReactElement {
   
   if (!loading){
     const randomGameID = Math.round(Math.random() * data.games.length); 
-    console.log(randomGameID);  
     setTimeout(() => navigate(`/Game/SongIntro`,{state : randomGameID}), 2000);
   }  
   return (

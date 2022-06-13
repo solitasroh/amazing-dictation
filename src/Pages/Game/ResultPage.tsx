@@ -2,14 +2,11 @@ import { Button } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import IGame from '../../types/IGame';
+import IHint from '../../types/IHint';
 
 interface Props {
   id: number;
-}
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
 }
 const Container = styled.div`
   display: flex;
@@ -65,7 +62,7 @@ const ButtonBox = styled.button`
 function ResultPage({ id }: Props): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = location?.state as { answer: boolean; songInfo: SongProps };
+  const data = location?.state as { answer: boolean; Info: IHint ; songInfo :IGame};
   const result = data?.answer ? '정답' : '실패';
   const [nextStage, setNextStage] = useState('');
 
@@ -78,7 +75,9 @@ function ResultPage({ id }: Props): React.ReactElement {
   }, []);
   const onClick = () => {
     if (result === '실패') {
-      navigate(`/Game/Hint`, { state: data?.songInfo });
+      const Info = data.Info as IHint;
+      const songInfo = data.songInfo as IGame;
+      navigate(`/Game/Hint`, { state: {Info, songInfo}});
     } else {
       navigate(`/Game/Loading`);
     }

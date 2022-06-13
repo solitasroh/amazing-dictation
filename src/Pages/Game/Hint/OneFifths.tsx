@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import styled, { css, keyframes } from 'styled-components';
 import ReplayBtn from '../../../Components/ReplayBtn';
 import SongInfo from '../../../Components/SongInfo';
+import IGame from '../../../types/IGame';
+import IHint from '../../../types/IHint';
 
 interface Props {
   id: number;
@@ -14,11 +16,7 @@ interface ArrayProps {
   id: number;
   data: string;
 }
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
-}
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -38,8 +36,13 @@ const TransparentContainer = styled.div`
   box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
   border-radius: 10px;
 `;
+const RowContainer = styled.div`
+  display: flex;
+`;
+
 const LyricsContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
 `;
 const WordAnimation = keyframes`
@@ -72,9 +75,11 @@ const WordsBox = styled.div<WordsProps>`
 
 function OneFifths({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as SongProps;
-  const lyrics = Array.from(word.lyrics);
-  const lyricsArray = lyrics.filter(data => data !== ' ');
+  const word = location?.state as {Info: IHint ; songInfo :IGame};
+  const lyrics = word.Info.Lyrics.map((value)=> value.filter(data => data !== ' '));
+ // const lyricsArray = lyrics.map((value)=> value.filter(data => data !== ' '));
+  const lyricsArray = lyrics.reduce(( accumulator, currentValue ) => accumulator.concat(currentValue),
+  []);
   const [questionArray, setQuestionArray] = useState<ArrayProps[]>([]);
   const [wordArray, setWordArray] = useState<ArrayProps[]>([]);
   const [rotate, setRotate] = useState(false);
@@ -113,15 +118,26 @@ function OneFifths({ id }: Props): React.ReactElement {
   return (
     <Container>
       <TransparentContainer>
-        <SongInfo title={word?.title} singer={word?.singer}/>
+        <SongInfo title={word?.Info.title} singer={word?.Info.singer}/>
         <LyricsContainer>
           {wordArray.map((data, index) => (
+          <RowContainer key ={data.id}>
             <WordsBox active={rotate} key={data.id} onAnimationEnd={endAnimation}>
               {data.data}{' '}
             </WordsBox>
+            </RowContainer>
           ))}
         </LyricsContainer>
-        <ReplayBtn title={word.title} singer={word.singer} lyrics = {word.lyrics}/>
+        <ReplayBtn id={word.songInfo.id} title={word.Info.title} singer={word.Info.singer} 
+          preSectionLyrics={ word.songInfo.preSectionLyrics}
+          postSectionLyrics={word.songInfo.postSectionLyrics}
+          questionLyrics={word.songInfo.questionLyrics}
+          preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
+          preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
+          questionSectionPlayStartTime={word.songInfo.questionSectionPlayStartTime}
+          questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
+          songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
+          musicFileLinkUrl ={word.songInfo.musicFileLinkUrl}/>
       </TransparentContainer>
     </Container>
   );

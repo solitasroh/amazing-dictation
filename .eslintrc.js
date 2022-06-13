@@ -51,6 +51,12 @@ module.exports = {
     'react/require-default-props': 'off',
     'react/jsx-wrap-multilines': 'off',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'prettier/prettier': [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   },
   settings: {
     react: {

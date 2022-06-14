@@ -33,7 +33,7 @@ const TransparentContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   background: rgba(135, 135, 135, 0.86);
-  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);
   border-radius: 10px;
 `;
 const RowContainer = styled.div`
@@ -75,13 +75,16 @@ const WordsBox = styled.div<WordsProps>`
 
 function OneFifths({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as {Info: IHint ; songInfo :IGame};
-  const lyrics = word.Info.Lyrics.map((value)=> value.filter(data => data !== ' '));
- // const lyricsArray = lyrics.map((value)=> value.filter(data => data !== ' '));
-  const lyricsArray = lyrics.reduce(( accumulator, currentValue ) => accumulator.concat(currentValue),
-  []);
-  const [questionArray, setQuestionArray] = useState<ArrayProps[]>([]);
-  const [wordArray, setWordArray] = useState<ArrayProps[]>([]);
+  const word = location?.state as { Info: IHint; songInfo: IGame };
+  const lyrics = word.Info.Lyrics.map(value =>
+    value.filter(data => data !== ' '),
+  );
+  const lyricsArray = lyrics.reduce(
+    (accumulator, currentValue) => accumulator.concat(currentValue),
+    [],
+  );
+  const [questionArray, setQuestionArray] = useState<ArrayProps[][]>([]);
+  const [wordArray, setWordArray] = useState<ArrayProps[][]>([]);
   const [rotate, setRotate] = useState(false);
 
   const endAnimation = () => {
@@ -91,23 +94,27 @@ function OneFifths({ id }: Props): React.ReactElement {
   useEffect(() => {
     for (let i = 0; i < lyricsArray.length; i += 1) {
       const j = Math.floor(Math.random() * lyricsArray.length);
-      console.log(j);
       const tmp = lyricsArray[i];
       lyricsArray[i] = lyricsArray[j];
       lyricsArray[j] = tmp;
     }
-    const tmp: ArrayProps[] = lyricsArray.map((value, idx) => ({
-      id: idx,
-      data: value,
-    }));
+    const tmp = new Array<ArrayProps[]>();
+    for (let i = 0; i < lyrics.length; i += 1) {
+      tmp.push([]);
+      for (let j = 0; j < lyrics[i].length; j += 1) {
+        tmp[i].push({ id: j, data: lyricsArray[j + i * lyrics[i].length] });
+      }
+    }
     setWordArray(tmp);
-    console.log(wordArray);
   }, [rotate]);
 
   useEffect(() => {
-    const array = new Array<ArrayProps>();
-    for (let i = 0; i < lyricsArray.length; i += 1) {
-      array.push({ id: i, data: '?' });
+    const array = new Array<ArrayProps[]>();
+    for (let i = 0; i < lyrics.length; i += 1) {
+      array.push([]);
+      for (let j = 0; j < lyrics[i].length; j += 1) {
+        array[i].push({ id: j, data: '?' });
+      }
     }
     setQuestionArray(array);
     setWordArray(array);
@@ -118,26 +125,38 @@ function OneFifths({ id }: Props): React.ReactElement {
   return (
     <Container>
       <TransparentContainer>
-        <SongInfo title={word?.Info.title} singer={word?.Info.singer}/>
+        <SongInfo title={word?.Info.title} singer={word?.Info.singer} />
         <LyricsContainer>
-          {wordArray.map((data, index) => (
-          <RowContainer key ={data.id}>
-            <WordsBox active={rotate} key={data.id} onAnimationEnd={endAnimation}>
-              {data.data}{' '}
-            </WordsBox>
+          {wordArray.map((value, index) => (
+            <RowContainer key={word.Info.key[index]}>
+              {value.map((value1, ind) => (
+                <WordsBox
+                  active={rotate}
+                  key={value1.id}
+                  onAnimationEnd={endAnimation}
+                >
+                  {value1.data}
+                </WordsBox>
+              ))}
             </RowContainer>
           ))}
         </LyricsContainer>
-        <ReplayBtn id={word.songInfo.id} title={word.Info.title} singer={word.Info.singer} 
-          preSectionLyrics={ word.songInfo.preSectionLyrics}
+        <ReplayBtn
+          id={word.songInfo.id}
+          title={word.Info.title}
+          singer={word.Info.singer}
+          preSectionLyrics={word.songInfo.preSectionLyrics}
           postSectionLyrics={word.songInfo.postSectionLyrics}
           questionLyrics={word.songInfo.questionLyrics}
           preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
           preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
-          questionSectionPlayStartTime={word.songInfo.questionSectionPlayStartTime}
+          questionSectionPlayStartTime={
+            word.songInfo.questionSectionPlayStartTime
+          }
           questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
           songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
-          musicFileLinkUrl ={word.songInfo.musicFileLinkUrl}/>
+          musicFileLinkUrl={word.songInfo.musicFileLinkUrl}
+        />
       </TransparentContainer>
     </Container>
   );

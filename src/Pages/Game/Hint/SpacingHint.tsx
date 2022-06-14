@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
-import styled, { css, keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import ReplayBtn from '../../../Components/ReplayBtn';
 import SongInfo from '../../../Components/SongInfo';
 import IGame from '../../../types/IGame';
@@ -9,11 +9,7 @@ import IHint from '../../../types/IHint';
 interface Props {
   id: number;
 }
-interface SongProps{
-  singer : string;
-  title : string;
-  lyrics : string;
-}
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -30,7 +26,7 @@ const TransparentContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   background: rgba(135, 135, 135, 0.86);
-  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);
   border-radius: 10px;
 `;
 const LyricsContainer = styled.div`
@@ -78,34 +74,52 @@ const SecretWordsBox = styled.div`
 `;
 function SpacingHint({ id }: Props): React.ReactElement {
   const location = useLocation();
-  const word = location?.state as {Info: IHint ; songInfo :IGame};
+  const word = location?.state as { Info: IHint; songInfo: IGame };
   const lyrics = word?.Info.Lyrics;
   const countArray = word.Info.key;
-
+  let c = 0;
+  const arrayIndex = lyrics.map(value =>
+    value.map(data => {
+      if (data === ' ') {
+        return ' ';
+      }
+      c += 1;
+      return countArray[c - 1];
+    }),
+  );
   return (
     <Container>
       <TransparentContainer>
-        <SongInfo title={word?.Info.title} singer={word?.Info.singer}/>
+        <SongInfo title={word?.Info.title} singer={word?.Info.singer} />
         <LyricsContainer>
-          {lyrics.map((value, index) =>
-          <RowContainer key={countArray[index]}>
-            {value.map((value1,ind) => 
-            value1 !== ' ' ? 
-            (<WordsBox key={countArray[ind + (index*ind)]}>
-            {ind + (lyrics[index].length*index) + 1}</WordsBox>)
-            : (<SecretWordsBox key={countArray[ind + (index*ind)]} />))}          
-            </RowContainer>)}
+          {arrayIndex.map((value, index) => (
+            <RowContainer key={countArray[index]}>
+              {value.map((value1, ind) =>
+                value1 !== ' ' ? (
+                  <WordsBox key={arrayIndex[index][ind]}>{value1 + 1}</WordsBox>
+                ) : (
+                  <SecretWordsBox key={arrayIndex[index][ind]} />
+                ),
+              )}
+            </RowContainer>
+          ))}
         </LyricsContainer>
-        <ReplayBtn id={word.songInfo.id} title={word.Info.title} singer={word.Info.singer} 
-          preSectionLyrics={ word.songInfo.preSectionLyrics}
+        <ReplayBtn
+          id={word.songInfo.id}
+          title={word.Info.title}
+          singer={word.Info.singer}
+          preSectionLyrics={word.songInfo.preSectionLyrics}
           postSectionLyrics={word.songInfo.postSectionLyrics}
           questionLyrics={word.songInfo.questionLyrics}
           preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
           preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
-          questionSectionPlayStartTime={word.songInfo.questionSectionPlayStartTime}
+          questionSectionPlayStartTime={
+            word.songInfo.questionSectionPlayStartTime
+          }
           questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
           songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
-          musicFileLinkUrl ={word.songInfo.musicFileLinkUrl}/>
+          musicFileLinkUrl={word.songInfo.musicFileLinkUrl}
+        />
       </TransparentContainer>
     </Container>
   );

@@ -29,7 +29,7 @@ const TransparentContainer = styled.div`
   align-items: center;
   justify-content: space-around;
   background: rgba(135, 135, 135, 0.86);
-  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);  
+  box-shadow: 2px 5px 1px 1px rgba(141, 115, 22, 0.94);
   border-radius: 10px;
 `;
 const LyricsContainer = styled.div`
@@ -97,84 +97,86 @@ function InitialConsonant({ id }: Props): React.ReactElement {
   };
 
   const location = useLocation();
-  const word = location?.state as {Info: IHint ; songInfo :IGame};
-  const wordArray = word?.Info.Lyrics;
+  const word = location?.state as { Info: IHint; songInfo: IGame };
+  const wordArray = word?.Info.Lyrics.map(value =>
+    value.filter(data => data !== ' '),
+  );
   const [initArray, setInitArray] = useState<string[][]>([]);
   const [copyArray, setCopyArray] = useState<string[][]>([]);
-  const [rotate, setRotate] = useState<boolean[]>([]);
+  const [rotate, setRotate] = useState<boolean[][]>([]);
   const [count, setCount] = useState(0);
   useEffect(() => {
-    const init = wordArray
-      .map((value)=> value.filter(data => data !== ' ')
-      .map(data =>
+    const init = wordArray.map(value =>
+      value.map(data =>
         data.charCodeAt(0) > 44031 && data.charCodeAt(0) < 55204 // Hangle unicode : 44031-55204
           ? changeHangle(data)
           : data,
-      ));
+      ),
+    );
 
-    const index = wordArray
-      .map((value)=> value.filter(data => data !== ' ')
-      .map((data, ind) => (ind + 1).toString()));
-    
+    const arrayIndex = wordArray.map((value, index) =>
+      value.map((data, ind) =>
+        (ind + 1 + index * wordArray[index].length).toString(),
+      ),
+    );
+    const rotateInit = wordArray.map(value => value.map(() => false));
+
+    setRotate(rotateInit);
     setInitArray(init);
-    setCopyArray(index);
+    setCopyArray(arrayIndex);
   }, []);
 
-  const onClick = (index: number , ind :number) => {
+  const onClick = (index: number, ind: number) => {
     const targetWord = initArray[index][ind];
-    const array = copyArray.map((value,i) => 
-    {
-      if(i === index)
-        return [
-        ...value.slice(0, i),
-        targetWord,
-        ...value.slice(i + 1),
-        ]
+    const array = copyArray.map((value, i) => {
+      if (i === index)
+        return [...value.slice(0, ind), targetWord, ...value.slice(ind + 1)];
       return value;
-  });
+    });
     console.log(array);
     setCopyArray(array);
-    // setCopyArray(prev => [
-    //   ...prev.slice(0, index),
-    //   targetWord,
-    //   ...prev.slice(index + 1),
-    // ]);
 
-    rotate[ind] = true;
+    rotate[index][ind] = true;
     setRotate(rotate);
     setCount(count + 1);
   };
   return (
     <Container>
       <TransparentContainer>
-        <SongInfo title={word?.Info.title} singer={word?.Info.singer}/>
+        <SongInfo title={word?.Info.title} singer={word?.Info.singer} />
         <LyricsContainer>
-          {copyArray
-            .map((value, index) => (
-            <RowContainer key={word.Info.key[index]}>{
-              value.map((value1,ind) => 
-                <WordsBox 
-                    key={word.Info.key[ind + (index*ind)]}
-                    onClick={() => {
-                      if (count < 2) onClick(index,ind);
-                    }}
-                    active={rotate[ind]}
-                  >
-                    {value1}
-                </WordsBox>)}
-              </RowContainer>
-            ))}
+          {copyArray.map((value, index) => (
+            <RowContainer key={word.Info.key[index]}>
+              {value.map((value1, ind) => (
+                <WordsBox
+                  key={value1}
+                  onClick={() => {
+                    if (count < 2) onClick(index, ind);
+                  }}
+                  active={rotate[index][ind]}
+                >
+                  {value1}
+                </WordsBox>
+              ))}
+            </RowContainer>
+          ))}
         </LyricsContainer>
-        <ReplayBtn id={word.songInfo.id} title={word.Info.title} singer={word.Info.singer} 
-        preSectionLyrics={ word.songInfo.preSectionLyrics}
-        postSectionLyrics={word.songInfo.postSectionLyrics}
-        questionLyrics={word.songInfo.questionLyrics}
-        preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
-        preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
-        questionSectionPlayStartTime={word.songInfo.questionSectionPlayStartTime}
-        questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
-        songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
-        musicFileLinkUrl ={word.songInfo.musicFileLinkUrl}/>
+        <ReplayBtn
+          id={word.songInfo.id}
+          title={word.Info.title}
+          singer={word.Info.singer}
+          preSectionLyrics={word.songInfo.preSectionLyrics}
+          postSectionLyrics={word.songInfo.postSectionLyrics}
+          questionLyrics={word.songInfo.questionLyrics}
+          preSectionPlayStartTime={word.songInfo.preSectionPlayStartTime}
+          preSectionPlayEndTime={word.songInfo.preSectionPlayEndTime}
+          questionSectionPlayStartTime={
+            word.songInfo.questionSectionPlayStartTime
+          }
+          questionSectionPlayEndTime={word.songInfo.questionSectionPlayEndTime}
+          songYoutubeLinkUrl={word.songInfo.songYoutubeLinkUrl}
+          musicFileLinkUrl={word.songInfo.musicFileLinkUrl}
+        />
       </TransparentContainer>
     </Container>
   );

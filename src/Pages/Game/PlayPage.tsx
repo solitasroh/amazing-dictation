@@ -112,7 +112,7 @@ function PlayPage({ id }: Props): React.ReactElement {
   const [runningTime, setRunningTime] = useState(0);
   const pauseTime = useRef(0);
   const countTime = songInfo.questionSectionPlayEndTime as number;
-  const audio = new Audio(songInfo.musicFileLinkUrl);
+  const [audio, setAudio] = useState(new Audio(songInfo.musicFileLinkUrl));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -146,6 +146,9 @@ function PlayPage({ id }: Props): React.ReactElement {
     inputValue.current = value;
   };
 
+  const onclick = (): void => {
+    audio.pause();
+  };
   const checkAnswer = (): void => {
     audio.pause();
     const answer = correct === inputValue.current.replace(/(\s*)/g, '');
@@ -211,6 +214,9 @@ function PlayPage({ id }: Props): React.ReactElement {
         <Input onChange={e => onChange(e.target.value)} />
         <Button type="primary" onClick={checkAnswer}>
           submit
+        </Button>
+        <Button type="primary" onClick={onclick}>
+          stop
         </Button>
       </InputContainer>
     </Container>

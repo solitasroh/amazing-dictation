@@ -63,7 +63,7 @@ const TitleBox = styled.div<colorProps>`
   display: flex;
   font-style: normal;
   font-weight: 400;
-  font-size: 40px;
+  font-size: 30px;
   line-height: 77px;
   transform: rotate(-5deg);
   justify-content: center;

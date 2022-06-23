@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://admin:postgres12@postgres:5432/server_db?schema=public"
+}
+
+enum Role {
+  Admin
+  User
+}
+
+model UserKakao {
+  id         Int    @id
+  userName   String
+  thumbUrl   String
+  profileUrl String
+  user       User?
+}
+
+model UserGoogle {
+  id       Int    @id
+  email    String
+  thumbUrl String
+  user     User?
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  role         Role
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt()
+  droppedAt    DateTime?
+  sleepdAt     DateTime?
+  lastLoggedIn DateTime
+  userKakao    UserKakao?  @relation(fields: [kakaoId], references: [id])
+  userGoogle   UserGoogle? @relation(fields: [googleId], references: [id])
+  kakaoId      Int?        @unique
+  googleId     Int?        @unique
+}
+
+model Game {
+  id                           Int      @id @default(autoincrement())
+  title                        String
+  singer                       String
+  preSectionLyrics             String?
+  postSectionLyrics            String?
+  questionLyrics               String[]
+  preSectionPlayStartTime      Int?
+  preSectionPlayEndTime        Int?
+  questionSectionPlayStartTime Int?
+  questionSectionPlayEndTime   Int?
+  songYoutubeLinkUrl           String?
+  musicFileLinkUrl             String?
+}

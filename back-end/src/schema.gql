@@ -1,0 +1,45 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Game {
+  id: Int!
+  title: String!
+  singer: String!
+  preSectionLyrics: String
+  postSectionLyrics: String
+  questionLyrics: String
+  prePlaySection: String
+  preSectionPlayStartTime: Int
+  preSectionPlayEndTime: Int
+  questionSectionPlayStartTime: Int
+  questionSectionPlayEndTime: Int
+  songYoutubeLinkUrl: String
+  musicFileLinkUrl: String
+}
+
+type Query {
+  game(id: Int!): Game!
+  games: [Game!]
+}
+
+type Mutation {
+  createGame(data: GameCreateInput!): Game!
+  updateGame(data: GameCreateInput!, id: Float!): Game!
+  deleteGame(id: Float!): Game!
+}
+
+input GameCreateInput {
+  title: String
+  singer: String
+  preSectionLyrics: String
+  postSectionLyrics: String
+  questionLyrics: String
+  prePlaySection: String
+  preSectionPlayStartTime: Int
+  preSectionPlayEndTime: Int
+  questionSectionPlayStartTime: Int
+  questionSectionPlayEndTime: Int
+  songYoutubeLinkUrl: String
+  musicFileLinkUrl: String
+}
